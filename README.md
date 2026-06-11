@@ -1,206 +1,318 @@
-# TALENTFORGE - Internship Readiness Analyzer
+# IRAN — Internship Readiness Analyzer
 
-TALENTFORGE is now a React/Vite project powered by Supabase for auth, database, roles, and stored assessment data.
+> AI-powered full-stack platform that evaluates student internship readiness through resume analysis, skill assessments, coding challenges, aptitude tests, and personalized AI roadmaps.
 
-You do not need Docker, Maven, Java, or a local PostgreSQL installation to run the current app.
+---
 
-## Current Stack
+## 🚀 Live Demo Credentials
 
-- Frontend: React, TypeScript, Vite, Tailwind CSS
-- Backend platform: Supabase
-- Auth: Supabase Auth
-- Database: Supabase Postgres
-- Local runtime: Node.js and npm
+| Role | Email | Password |
+|------|-------|----------|
+| Student | student@iran.dev | demo1234 |
+| Trainer | trainer@iran.dev | demo1234 |
+| Admin | admin@iran.dev | demo1234 |
 
-The old Spring Boot backend is still in the repository for reference, but the frontend no longer depends on it.
+---
 
-## Folder Structure
+## 📋 Tech Stack
 
-```text
-careerforge/
-  frontend/
-    src/
-      pages/
-      components/
-      features/
-      services/
-      hooks/
-      contexts/
-      types/
-      layouts/
-      routes/
-    .env.example
-    package.json
-  supabase/
-    schema.sql
-  backend/
-    legacy Spring Boot backend, not required for the Supabase app
-```
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 15 (App Router), TypeScript, TailwindCSS |
+| UI | shadcn/ui, Radix UI, Framer Motion, Recharts |
+| State | TanStack Query, React Hook Form, Zod |
+| Backend | Next.js API Routes + Server Actions |
+| Database | Supabase (PostgreSQL) |
+| Auth | Supabase Auth + JWT + RBAC |
+| Storage | Supabase Storage |
+| AI | Groq API (`llama-3.3-70b-versatile`) |
+| Deploy | Vercel + Supabase |
 
-## Features
+---
 
-- Supabase registration and login
-- Roles: `STUDENT`, `TRAINER`, `PLACEMENT_OFFICER`, `ADMIN`
-- Protected frontend routes
-- Student profile create/view/edit/delete
-- Resume metadata create/view/delete
-- Admin question bank create/view/update/delete
-- Skill and aptitude assessment start/submit
-- Assessment result storage
-- Student dashboard with profile completion, resume count, scores, and recent activity
+## ⚡ Quick Start
 
-## From-Zero Setup
+### 1. Clone & Install
 
-### 1. Install Node.js
-
-Install the LTS version from:
-
-```text
-https://nodejs.org/en/download
-```
-
-After installing, open a new PowerShell and check:
-
-```powershell
-node -v
-npm -v
-```
-
-Both commands should print version numbers.
-
-### 2. Create a Supabase Project
-
-1. Go to:
-
-```text
-https://supabase.com
-```
-
-2. Sign in or create an account.
-3. Click `New project`.
-4. Choose an organization.
-5. Enter a project name, for example:
-
-```text
-talentforge
-```
-
-6. Set a database password and save it somewhere safe.
-7. Choose a region near you.
-8. Create the project and wait until Supabase finishes provisioning it.
-
-### 3. Disable Email Confirmation for Local Demo
-
-This project logs users in immediately after registration. For that to work:
-
-1. Open your Supabase project.
-2. Go to `Authentication`.
-3. Go to `Providers`.
-4. Open `Email`.
-5. Turn off `Confirm email`.
-6. Save.
-
-If you leave email confirmation enabled, registration may succeed but login will not happen until the email is confirmed.
-
-### 4. Create the Database Tables
-
-1. In Supabase, go to `SQL Editor`.
-2. Click `New query`.
-3. Open this local file:
-
-```text
-supabase/schema.sql
-```
-
-4. Copy the whole SQL file.
-5. Paste it into Supabase SQL Editor.
-6. Click `Run`.
-
-This creates:
-
-- `profiles`
-- `student_profiles`
-- `resumes`
-- `questions`
-- `assessment_attempts`
-- row-level security policies
-- starter assessment questions
-
-### 5. Get Supabase API Keys
-
-In Supabase:
-
-1. Go to `Project Settings`.
-2. Go to `API`.
-3. Copy `Project URL`.
-4. Copy the `anon public` key.
-
-### 6. Create Frontend Environment File
-
-In the project, create:
-
-```text
-frontend/.env
-```
-
-Use this format:
-
-```env
-VITE_SUPABASE_URL=https://your-project-ref.supabase.co
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
-```
-
-You can also copy from:
-
-```text
-frontend/.env.example
-```
-
-### 7. Install Frontend Dependencies
-
-Open PowerShell:
-
-```powershell
-cd C:\Users\Somraj\Desktop\careerforge\frontend
+```bash
+git clone https://github.com/your-repo/iran-app.git
+cd iran-app
 npm install
 ```
 
-### 8. Run the App
+### 2. Set Environment Variables
 
-From the same `frontend` folder:
+```bash
+cp .env.example .env.local
+```
 
-```powershell
+Fill in your `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+GROQ_API_KEY=your_groq_api_key
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### 3. Set Up Database
+
+1. Go to your [Supabase Dashboard](https://app.supabase.com)
+2. Open **SQL Editor**
+3. Paste and run `supabase/migrations/001_initial_schema.sql`
+
+### 4. Create Storage Buckets
+
+In Supabase Dashboard → **Storage**, create:
+- `resumes` (private)
+- `avatars` (public)
+
+### 5. Seed Demo Data
+
+```bash
+npm run db:seed
+```
+
+This creates:
+- 10 sample internships
+- 10 coding questions (Easy/Medium/Hard)
+- 4 assessments with questions
+- 3 demo users (student, trainer, admin)
+
+### 6. Run Development Server
+
+```bash
 npm run dev
 ```
 
-Open:
+Open [http://localhost:3000](http://localhost:3000)
 
-```text
-http://localhost:5173
+---
+
+## 🏗️ Project Structure
+
+```
+iran-app/
+├── app/
+│   ├── auth/                    # Login, Register, Forgot Password
+│   ├── dashboard/
+│   │   ├── layout.tsx           # Shared sidebar layout
+│   │   ├── student/             # Student pages
+│   │   │   ├── page.tsx         # Main dashboard
+│   │   │   ├── profile/         # Profile management
+│   │   │   ├── resume/          # Resume upload + AI analysis
+│   │   │   ├── assessments/     # Skill assessment tests
+│   │   │   ├── coding/          # Coding practice
+│   │   │   ├── aptitude/        # Aptitude tests + leaderboard
+│   │   │   ├── readiness/       # Readiness score breakdown
+│   │   │   ├── recommendations/ # AI roadmaps & plans
+│   │   │   └── internships/     # Internship matching
+│   │   ├── trainer/             # Trainer dashboard
+│   │   ├── placement/           # Placement officer dashboard
+│   │   └── admin/               # Admin: users, assessments, logs
+│   ├── api/
+│   │   ├── auth/register/       # User registration
+│   │   ├── profile/completion/  # Profile completion calc
+│   │   ├── resume/analyze/      # AI resume analysis
+│   │   ├── readiness/calculate/ # Deterministic scoring
+│   │   ├── recommendations/     # AI recommendation generation
+│   │   └── internships/match/   # Internship matching algorithm
+│   ├── layout.tsx               # Root layout
+│   └── page.tsx                 # Landing page
+├── components/
+│   ├── ui/                      # All shadcn/UI components
+│   └── shared/                  # ThemeProvider, QueryProvider
+├── lib/
+│   ├── supabase/                # Client + Server clients
+│   ├── groq/                    # AI service functions
+│   ├── scoring/                 # Deterministic readiness engine
+│   └── utils/                   # Utility functions
+├── types/                       # TypeScript type definitions
+├── hooks/                       # Custom React hooks
+├── supabase/
+│   ├── migrations/              # SQL schema migrations
+│   └── seed/                    # Demo data seed script
+├── middleware.ts                # Route protection + RBAC
+└── jest.config.ts               # Test configuration
 ```
 
-## How to Use
+---
 
-1. Register a `STUDENT` account.
-2. Create a student profile.
-3. Add resume records.
-4. Start and submit assessments.
-5. View results and dashboard stats.
-6. Register an `ADMIN` account.
-7. Log in as admin and manage the question bank.
+## 🎯 Features
 
-## Build Command
+### For Students
+- **Profile Management** — education, skills, projects, certifications with completion %
+- **AI Resume Analyzer** — PDF upload → ATS score, grammar check, keyword analysis
+- **Skill Assessments** — MCQ tests with auto-scoring and feedback
+- **Coding Practice** — Problem set with in-browser code editor
+- **Aptitude Tests** — Quantitative + Logical + Verbal with timer and leaderboard
+- **Readiness Score** — Deterministic 6-component scoring formula
+- **AI Roadmaps** — 30/60/90-day preparation plans via Groq AI
+- **Internship Matching** — Profile-based matching with % score
 
-```powershell
-cd C:\Users\Somraj\Desktop\careerforge\frontend
-npm run build
+### For Trainers
+- Student progress overview dashboard
+- Assessment management
+- Analytics and statistics
+
+### For Placement Officers
+- Placement readiness analytics
+- Department-wise breakdown
+- CSV export for reporting
+
+### For Admins
+- Full user management (activate/deactivate/role change)
+- Assessment creation and management
+- Complete audit logs
+- Platform analytics
+
+---
+
+## 🧮 Readiness Scoring Formula
+
+The readiness score uses a **deterministic formula** (no AI):
+
+```
+Score = (Profile × 15%) + (Resume × 25%) + (Coding × 25%) 
+      + (Aptitude × 15%) + (Projects × 10%) + (Certifications × 10%)
 ```
 
-## Important Notes
+| Score Range | Category |
+|-------------|----------|
+| 0–40 | Not Ready |
+| 41–60 | Needs Improvement |
+| 61–80 | Internship Ready |
+| 81–100 | Highly Ready |
 
-- No backend server is required now.
-- No Docker is required now.
-- No Maven is required now.
-- The Supabase anon key is safe to use in frontend apps.
-- Keep the Supabase database password private.
-- Assessment scoring currently happens in the frontend for simplicity. For a production-grade exam system, move scoring into a Supabase Edge Function.
+---
+
+## 🤖 AI Module (Groq)
+
+Uses `llama-3.3-70b-versatile` with structured JSON outputs validated by Zod:
+
+- `analyzeResume()` — ATS score, keywords, grammar, skill gaps
+- `generateRoadmap()` — 30/60/90-day plans
+- `generateSkillGapAnalysis()` — Prioritized gap analysis
+- `generateInterviewPreparation()` — Technical + behavioral plan
+- `generateDSAPlan()` — Topic-wise DSA schedule
+
+All AI functions have **deterministic fallbacks** if the API fails.
+
+---
+
+## 🔒 Security
+
+- **RBAC** — Route-level protection in `middleware.ts`
+- **RLS** — Row Level Security on all Supabase tables
+- **Input validation** — Zod schemas on all API routes
+- **Service role** — Only used server-side for admin operations
+- **Audit logs** — All significant actions are logged
+
+---
+
+## 🧪 Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Watch mode
+npm run test:watch
+
+# Coverage report
+npm test -- --coverage
+```
+
+Test coverage includes:
+- Scoring engine (all 6 components + overall)
+- Internship matching algorithm
+- Utility functions
+- Role permission logic
+- Category threshold validation
+
+---
+
+## 🚀 Deployment
+
+### Deploy to Vercel
+
+1. Push code to GitHub
+2. Import project in [Vercel](https://vercel.com)
+3. Add environment variables in Vercel dashboard
+4. Deploy!
+
+### Environment Variables for Vercel
+
+```
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+GROQ_API_KEY
+NEXT_PUBLIC_APP_URL
+```
+
+### Supabase Production Checklist
+
+- [ ] Run migration SQL in production
+- [ ] Create `resumes` and `avatars` storage buckets
+- [ ] Configure email templates in Supabase Auth
+- [ ] Enable email confirmations
+- [ ] Set redirect URLs in Supabase Auth settings
+- [ ] Configure RLS policies (included in migration)
+
+---
+
+## 📦 Getting API Keys
+
+### Supabase
+1. Create project at [supabase.com](https://supabase.com)
+2. Settings → API → copy `URL`, `anon key`, `service_role key`
+
+### Groq
+1. Sign up at [console.groq.com](https://console.groq.com)
+2. API Keys → Create new key
+3. Free tier gives generous limits
+
+---
+
+## 🗄️ Database Tables
+
+| Table | Purpose |
+|-------|---------|
+| `users` | Auth users with roles |
+| `student_profiles` | Detailed student info |
+| `certifications` | User certifications |
+| `projects` | Portfolio projects |
+| `resumes` | Uploaded resume files |
+| `resume_reports` | AI analysis results |
+| `assessments` | Test/quiz definitions |
+| `questions` | MCQ questions |
+| `attempts` | Assessment attempts |
+| `coding_questions` | Coding problems |
+| `coding_submissions` | Code submissions |
+| `readiness_scores` | Calculated scores |
+| `recommendations` | AI recommendations |
+| `internships` | Internship listings |
+| `internship_matches` | Profile matches |
+| `notifications` | User notifications |
+| `audit_logs` | System audit trail |
+| `analytics_events` | Usage analytics |
+
+---
+
+## 📄 License
+
+MIT — Free to use for educational and portfolio purposes.
+
+---
+
+## 👨‍💻 About
+
+Built as a **Final Year BTech Major Project** demonstrating:
+- Full-stack Next.js 15 with App Router
+- Real-world Supabase auth, storage, and database
+- AI integration with Groq
+- Production-grade RBAC and security
+- Comprehensive test coverage
+- Modern SaaS UI design patterns
