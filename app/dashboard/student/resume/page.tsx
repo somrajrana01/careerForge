@@ -176,6 +176,17 @@ export default function ResumePage() {
       return;
     }
 
+    // Check for duplicate resume uploads
+    const isDuplicate = resumes.some((resume) => resume.file_name === file.name);
+    if (isDuplicate) {
+      toast({
+        title: "Duplicate resume",
+        description: "Resume already uploaded. Please upload a different file.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setUploading(true);
     try {
       const path = `${userId}/${Date.now()}_${file.name}`;
@@ -191,7 +202,10 @@ export default function ResumePage() {
       if (dbError) throw dbError;
 
       setResumes((prev) => [resumeRec as Resume, ...prev]);
-      toast({ title: "Resume uploaded!", description: "Starting AI analysis..." });
+      toast({
+        title: "Resume uploaded successfully",
+        description: `Starting AI analysis for ${file.name}.`,
+      });
 
       await analyzeResume((resumeRec as Resume).id);
     } catch (e: any) {
@@ -445,10 +459,41 @@ export default function ResumePage() {
       )}
 
       {!r && resumes.length === 0 && (
-        <div className="text-center py-12 text-muted-foreground">
-          <FileText className="h-12 w-12 mx-auto mb-3 opacity-30" />
-          <p>Upload your resume to get started</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card p-8 border border-border/50"
+        >
+          <div className="flex flex-col items-center gap-4 py-8">
+            <div className="p-4 rounded-full bg-iran-500/10">
+              <FileText className="h-8 w-8 text-iran-400" />
+            </div>
+            <div className="text-center max-w-md">
+              <h3 className="font-semibold text-sm mb-2">Get Your Resume Analyzed</h3>
+              <p className="text-xs text-muted-foreground mb-4">
+                Upload your PDF resume to receive comprehensive AI-powered feedback including:
+              </p>
+              <ul className="text-xs text-muted-foreground space-y-1.5 text-left inline-block">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                  <span>ATS Score & compatibility</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                  <span>Skill gap analysis</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                  <span>Keyword analysis</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                  <span>Personalized improvement suggestions</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </motion.div>
       )}
     </div>
   );
