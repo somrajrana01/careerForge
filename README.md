@@ -89,6 +89,30 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000)
 
 ---
+## 🏛️ System Architecture
+
+      The Internship Readiness Analyzer (IRAN) follows a modern full-stack architecture designed for scalability, security, and maintainability.
+
+      Architecture Flow
+      Student / Trainer / Admin
+                  │
+                  ▼
+            Next.js Frontend
+                  │
+                  ▼
+            API Routes Layer
+                  │
+      ┌───────┴────────┐
+      ▼                ▼
+      Supabase DB      Groq AI
+      (PostgreSQL)   (LLM Services)
+      │                │
+      └───────┬────────┘
+                  ▼
+      Readiness Engine
+                  │
+                  ▼
+      Recommendations
 
 ## 🏗️ Project Structure
 
@@ -307,6 +331,21 @@ MIT — Free to use for educational and portfolio purposes.
 
 ---
 
+## 🔮 Future Enhancements
+
+The following features are planned for future releases:
+
+- Real-time coding contest platform
+- AI-powered mock interview simulator
+- Company-specific preparation roadmaps
+- Advanced recruiter dashboard
+- Mobile application support
+- Real-time notifications and alerts
+- GitHub profile integration
+- LinkedIn skill verification support
+- Personalized learning recommendations
+- Placement prediction analytics
+
 ## 👨‍💻 About
 
 Built as a **Final Year BTech Major Project** demonstrating:
@@ -316,3 +355,21 @@ Built as a **Final Year BTech Major Project** demonstrating:
 - Production-grade RBAC and security
 - Comprehensive test coverage
 - Modern SaaS UI design patterns
+
+## 🤝 Contributors
+
+- This project was collaboratively developed as a Final Year BTech Major Project.
+
+ Development Team
+- Somraj Rana
+- Piyush
+- Rudra Pratap Singh
+
+ Contributions include:
+
+- Full-stack application development
+- Database design and implementation
+- Authentication and authorization
+- AI integration and recommendation engine
+- Documentation and testing
+- UI/UX development
