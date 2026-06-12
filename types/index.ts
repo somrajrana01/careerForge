@@ -14,6 +14,16 @@ export type DifficultyLevel = "easy" | "medium" | "hard";
 export type SubmissionStatus = "pending" | "evaluated" | "failed";
 export type NotificationType = "info" | "success" | "warning" | "error";
 export type AptitudeSection = "quantitative" | "logical" | "verbal";
+export type PlacementDriveStatus = "draft" | "open" | "closed" | "completed" | "cancelled";
+export type ApplicationStatus =
+  | "saved"
+  | "applied"
+  | "shortlisted"
+  | "interviewing"
+  | "selected"
+  | "rejected"
+  | "withdrawn";
+export type TrainingSessionStatus = "scheduled" | "completed" | "cancelled";
 
 // =====================================================
 // DATABASE MODELS
@@ -397,6 +407,93 @@ export interface AuditLog {
   ip_address?: string;
   user_agent?: string;
   created_at: string;
+}
+
+export interface PlacementDrive {
+  id: string;
+  created_by?: string;
+  company_name: string;
+  title: string;
+  description?: string;
+  location?: string;
+  start_date?: string;
+  application_deadline?: string;
+  eligible_branches?: string[];
+  eligible_years?: number[];
+  is_active?: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PlacementApplication {
+  id: string;
+  drive_id?: string;
+  internship_id?: string;
+  user_id: string;
+  status: ApplicationStatus;
+  resume_id?: string;
+  notes?: string;
+  applied_at: string;
+  updated_at: string;
+  drive?: PlacementDrive;
+  internship?: Internship;
+  user?: User;
+}
+
+export interface TrainingBatch {
+  id: string;
+  trainer_id: string;
+  name: string;
+  description?: string;
+  cohort?: string;
+  starts_on?: string;
+  ends_on?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TrainingBatchStudent {
+  id: string;
+  batch_id: string;
+  user_id: string;
+  enrolled_at: string;
+  batch?: TrainingBatch;
+  user?: User;
+}
+
+export interface TrainingSession {
+  id: string;
+  batch_id?: string;
+  trainer_id: string;
+  title: string;
+  description?: string;
+  starts_at?: string;
+  duration_minutes: number;
+  status: TrainingSessionStatus;
+  attendance: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PlacementPipelineAnalytics {
+  source_id: string;
+  company_name: string;
+  title: string;
+  applications: number;
+  shortlisted: number;
+  interviewing: number;
+  selected: number;
+  rejected: number;
+}
+
+export interface TrainerBatchAnalytics {
+  batch_id: string;
+  trainer_id: string;
+  name: string;
+  students_count: number;
+  sessions_count: number;
+  completed_sessions: number;
 }
 
 // =====================================================

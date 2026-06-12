@@ -1,19 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
 import {
   Plus, Loader2, Edit, Trash2, CheckCircle2, XCircle,
-  ClipboardList, Clock, Target, ChevronDown, Save, X,
+  ClipboardList, Clock, Target, Save, BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { createClient } from "@/lib/supabase/client";
-import { cn, getDifficultyColor, formatDate } from "@/lib/utils";
+import { cn, getDifficultyColor } from "@/lib/utils";
 import type { Assessment } from "@/types";
 
 const assessmentSchema = z.object({
@@ -203,6 +203,11 @@ export default function AdminAssessmentsPage() {
             </div>
 
             <div className="flex items-center gap-2">
+              <Link href={`/dashboard/admin/assessments/${a.id}`}>
+                <Button variant="outline" size="sm" className="h-7 text-xs">
+                  <BookOpen className="h-3 w-3 mr-1" />Manage Questions
+                </Button>
+              </Link>
               <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => openEdit(a)}>
                 <Edit className="h-3 w-3 mr-1" />Edit
               </Button>

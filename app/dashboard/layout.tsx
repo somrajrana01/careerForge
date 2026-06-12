@@ -49,6 +49,7 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
   trainer: [
     { label: "Dashboard", href: "/dashboard/trainer", icon: LayoutDashboard },
     { label: "Students", href: "/dashboard/trainer/students", icon: Users },
+    { label: "Batches", href: "/dashboard/trainer/batches", icon: Briefcase },
     { label: "Assessments", href: "/dashboard/trainer/assessments", icon: ClipboardList },
     { label: "Analytics", href: "/dashboard/trainer/analytics", icon: BarChart3 },
   ],
